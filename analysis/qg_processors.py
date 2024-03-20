@@ -1,5 +1,4 @@
 import uproot
-import vector
 import coffea
 import correctionlib
 import sys
@@ -11,7 +10,7 @@ import copy
 
 import numpy as np
 import awkward as ak
-import analysis_utils as utils
+import analysis_helpers as utils
 
 from coffea import processor
 from coffea.nanoevents import NanoEventsFactory, NanoAODSchema
@@ -188,7 +187,7 @@ class DijetProcessor(processor.ProcessorABC):
             lumi_json_file = utils.lumi_json(self.campaign)
             lumi_mask = LumiMask(lumi_json_file)(run, lumiblock) 
 
-        nEvents = len(events.HLT.ZeroBias)
+        nEvents = len(events)
         event_rho = events.fixedGridRhoFastjetAll
         PV_npvs = events.PV.npvs
         PV_npvsGood = events.PV.npvsGood
@@ -217,7 +216,8 @@ class DijetProcessor(processor.ProcessorABC):
         # TRIGGER SELECTION #
         # # # # # # # # # # #
 
-        trigger_mask = (events.HLT.ZeroBias==1)
+        trigger = utils.hlt_trigger(self.campaign, 'dijet')
+        trigger_mask = (events.HLT[trigger] == 1)
 
         # # # # # # # #
         # MET FILTERS #
@@ -603,7 +603,7 @@ class ZmmProcessor(processor.ProcessorABC):
             lumi_json_file = utils.lumi_json(self.campaign)
             lumi_mask = LumiMask(lumi_json_file)(run, lumiblock) 
 
-        nEvents = len(events.HLT.Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8)
+        nEvents = len(events)
         event_rho = events.fixedGridRhoFastjetAll
         PV_npvs = events.PV.npvs
         PV_npvsGood = events.PV.npvsGood
@@ -631,7 +631,8 @@ class ZmmProcessor(processor.ProcessorABC):
         # TRIGGER SELECTION #
         # # # # # # # # # # #
         
-        trigger_mask = (events.HLT.Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8==1)
+        trigger = utils.hlt_trigger(self.campaign, 'zmm')
+        trigger_mask = (events.HLT[trigger] == 1)
 
         # # # # # # # #
         # MET FILTERS #

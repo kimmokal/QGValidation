@@ -16,7 +16,7 @@ mc_names = ['DY','QCD_HT50to100','QCD_HT100to200','QCD_HT200to300','QCD_HT300to5
 
 def lumi_json(campaign):
     if campaign not in ['UL16_preVFP', 'UL16_postVFP', 'UL17', 'UL18']:
-        sys.exit('ERROR: Only UL16_preVFP, UL16_postVFP, UL17, UL18 supported for object selection!')
+        sys.exit('ERROR: Only UL16_preVFP, UL16_postVFP, UL17, UL18 campaigns supported!')
 
     lumi_json_path = os.path.join(os.environ['COFFEAHOME'],'data','json')
     lumi_json_file = {
@@ -28,9 +28,25 @@ def lumi_json(campaign):
 
     return f'{lumi_json_path}/{lumi_json_file[campaign]}'
 
+def hlt_trigger(campaign, channel):
+    if campaign not in ['UL16_preVFP', 'UL16_postVFP', 'UL17', 'UL18']:
+        sys.exit('ERROR: Only UL16_preVFP, UL16_postVFP, UL17, UL18 campaigns supported!')
+    if channel not in ['zmm', 'dijet']:
+        sys.exit('ERROR: Only zmm and dijet channels supported!')
+
+    zmm_trigger = {
+            'UL16_preVFP' : 'Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ',
+            'UL16_postVFP' : 'Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ',
+            'UL17' : 'Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8',
+            'UL18' : 'Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8'
+            }
+
+    trigger = 'ZeroBias' if (channel == 'dijet') else zmm_trigger[campaign]
+    return trigger
+
 def jerc_objects(campaign):
     if campaign not in ['UL16_preVFP', 'UL16_postVFP', 'UL17', 'UL18']:
-        sys.exit('ERROR: Only UL16_preVFP, UL16_postVFP, UL17, UL18 supported for object selection!')
+        sys.exit('ERROR: Only UL16_preVFP, UL16_postVFP, UL17, UL18 campaigns supported!')
 
     jer_mc_SF = {
             'UL16_preVFP': 'Summer20UL16APV_JRV3_MC_SF_AK4PFchs',
@@ -98,7 +114,7 @@ def jerc_objects(campaign):
 
 def qgl_pdf_and_binning(campaign):
     if campaign not in ['UL16_preVFP', 'UL16_postVFP', 'UL17', 'UL18']:
-        sys.exit('ERROR: Only UL16_preVFP, UL16_postVFP, UL17, UL18 supported for object selection!')
+        sys.exit('ERROR: Only UL16_preVFP, UL16_postVFP, UL17, UL18 campaigns supported!')
 
     pdf = {
             'UL16_preVFP': 'PDF_QGL_JMEnano_UL16_Ak4CHS',
@@ -136,9 +152,9 @@ def qgl_pdf_and_binning(campaign):
 
 def pileup_weights(campaign, channel):
     if campaign not in ['UL16_preVFP', 'UL16_postVFP', 'UL17', 'UL18']:
-        sys.exit('ERROR: Only UL16_preVFP, UL16_postVFP, UL17, UL18 supported for object selection!')
+        sys.exit('ERROR: Only UL16_preVFP, UL16_postVFP, UL17, UL18 campaigns supported!')
     if channel not in ['zmm', 'dijet']:
-        sys.exit('ERROR: Only zmm and dijet supported for object selection!')
+        sys.exit('ERROR: Only zmm and dijet channels supported!')
 
     dataset = 'goldenJSON' if channel=='zmm' else 'HLT_ZeroBias'
 
@@ -165,7 +181,7 @@ def object_selection(obj, name, campaign, selection=None):
     Returns: obj array with selection applied '''
 
     if campaign not in ['UL16_preVFP', 'UL16_postVFP', 'UL17', 'UL18']:
-        sys.exit('ERROR: Only UL16_preVFP, UL16_postVFP, UL17, UL18 supported for object selection!')
+        sys.exit('ERROR: Only UL16_preVFP, UL16_postVFP, UL17, UL18 campaigns supported!')
 
     if 'VFP' in campaign:
         campaign = 'UL16'
@@ -192,7 +208,7 @@ def object_selection(obj, name, campaign, selection=None):
                     (obj['pt'] > 20)  &
                     (obj['dxy'] < 0.2) &
                     (obj['dz'] < 0.5) &
-                    (obj['iso'] < 0.15) &
+                    (obj['pfRelIso04_all'] < 0.15) &
                     (obj['tightId']) &
                     (obj['mass'] > -1)
                 )

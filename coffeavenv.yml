@@ -2,9 +2,5 @@ name: coffeavenv
 channels:
     - conda-forge
 dependencies:
-    - python=3.9.5
-    - coffea=0.7.17
-    - numpy=1.21.5
-    - awkward=1.8.0
-    - vector=0.8.5
-    - hist=2.6.1
+    - python=3.12.2
+    - coffea=2024.3.0
