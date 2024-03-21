@@ -148,11 +148,14 @@ then
     do
         for variable in qgl deepjet particlenet
         do
-            python ${script_path}/wp_validation_plots.py --config ${config_file} -c ${channel} -v ${variable} -s -r
-            for syst in gluon fsr isr pu jes jer
+            for wp in loose medium tight
             do
-                  python ${script_path}/wp_validation_plots.py --config ${config_file} -c ${channel} -v ${variable} --syst ${syst} --syst_up -s -r
-                  python ${script_path}/wp_validation_plots.py --config ${config_file} -c ${channel} -v ${variable} --syst ${syst} --syst_down -s -r
+                python ${script_path}/wp_validation_plots.py --config ${config_file} -c ${channel} -v ${variable} -w ${wp} -s -r
+                for syst in gluon fsr isr pu jes jer
+                do
+                      python ${script_path}/wp_validation_plots.py --config ${config_file} -c ${channel} -v ${variable} -w ${wp} --syst ${syst} --syst_up -s -r
+                      python ${script_path}/wp_validation_plots.py --config ${config_file} -c ${channel} -v ${variable} -w ${wp} --syst ${syst} --syst_down -s -r
+                done
             done
         done
     done
