@@ -11,7 +11,7 @@ if [ $# -eq 1 ]; then
     config_file=$1
     echo "Using config: ${1}"
 else
-    echo "ERROR: Specify config file as an argument: ${0} config_file.toml"
+    echo "ERROR: Specify config file as an argument: ./run_scripts.sh config/config_file.toml"
     return 1
 fi
 
@@ -29,8 +29,7 @@ FLAG_PROCESS_HISTOGRAMS_FOR_ROC_CURVES=1
 FLAG_COMBINE_HISTOGRAMS_FOR_ROC_CURVES=1
 FLAG_PLOT_ROC_CURVES=1
 
-#### TO BE IMPLEMENTED !!!
-FLAG_PROCESS_WP_VALIDATION_PLOTS=0
+FLAG_PROCESS_WP_VALIDATION_PLOTS=1
 FLAG_EXTRACT_WP_SCALE_FACTORS=0
 FLAG_PLOT_WP_SCALE_FACTORS=0
 ####################################################
@@ -139,6 +138,22 @@ fi
 
 if [ ${FLAG_PLOT_ROC_CURVES} -eq 1 ] 
 then
-    python ${script_path}/roc_curve_plot.py --config ${config_file} -s -u
+    python ${script_path}/roc_curve_plot.py --config ${config_file} -s --uncertainty_band
     python ${script_path}/roc_curve_plot.py --config ${config_file} -s --wp
+fi
+
+if [ ${FLAG_PROCESS_WP_VALIDATION_PLOTS} -eq 1 ] 
+then
+    for channel in zmm dijet
+    do
+        for variable in qgl deepjet particlenet
+        do
+            python ${script_path}/wp_validation_plots.py --config ${config_file} -c ${channel} -v ${variable} -s -r
+            for syst in gluon fsr isr pu jes jer
+            do
+                  python ${script_path}/wp_validation_plots.py --config ${config_file} -c ${channel} -v ${variable} --syst ${syst} --syst_up -s -r
+                  python ${script_path}/wp_validation_plots.py --config ${config_file} -c ${channel} -v ${variable} --syst ${syst} --syst_down -s -r
+            done
+        done
+    done
 fi
