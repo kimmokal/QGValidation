@@ -54,28 +54,28 @@ def main(config_path, display_plot, show_uncertainty, determine_WPs, save_plot):
 
         campaign = config['campaign']
         with uproot.open(f'{input_file_path}/hists_for_roc/combined/qgl_hists_combined_{campaign}_eta{eta_range}_pt{pt_range}.root') as hists:
-            qgl_quark_hist = hists['hist_quark'].values()
-            qgl_gluon_hist = hists['hist_gluon'].values()
-            qgl_quark_hist_up = hists['hist_quark_up'].values()
-            qgl_gluon_hist_up = hists['hist_gluon_up'].values()
-            qgl_quark_hist_down = hists['hist_quark_down'].values()
-            qgl_gluon_hist_down = hists['hist_gluon_down'].values()
+            qgl_quark_hist = hists['quark_hist'].values()
+            qgl_gluon_hist = hists['gluon_hist'].values()
+            qgl_quark_hist_up = hists['quark_hist_up'].values()
+            qgl_gluon_hist_up = hists['gluon_hist_up'].values()
+            qgl_quark_hist_down = hists['quark_hist_down'].values()
+            qgl_gluon_hist_down = hists['gluon_hist_down'].values()
 
         with uproot.open(f'{input_file_path}/hists_for_roc/combined/btagDeepFlavQG_hists_combined_{campaign}_eta{eta_range}_pt{pt_range}.root') as hists:
-            deepjet_quark_hist = hists['hist_quark'].values()
-            deepjet_gluon_hist = hists['hist_gluon'].values()
-            deepjet_quark_hist_up = hists['hist_quark_up'].values()
-            deepjet_gluon_hist_up = hists['hist_gluon_up'].values()
-            deepjet_quark_hist_down = hists['hist_quark_down'].values()
-            deepjet_gluon_hist_down = hists['hist_gluon_down'].values()
+            deepjet_quark_hist = hists['quark_hist'].values()
+            deepjet_gluon_hist = hists['gluon_hist'].values()
+            deepjet_quark_hist_up = hists['quark_hist_up'].values()
+            deepjet_gluon_hist_up = hists['gluon_hist_up'].values()
+            deepjet_quark_hist_down = hists['quark_hist_down'].values()
+            deepjet_gluon_hist_down = hists['gluon_hist_down'].values()
 
         with uproot.open(f'{input_file_path}/hists_for_roc/combined/particleNetAK4_QvsG_hists_combined_{campaign}_eta{eta_range}_pt{pt_range}.root') as hists:
-            particlenet_quark_hist = hists['hist_quark'].values()
-            particlenet_gluon_hist = hists['hist_gluon'].values()
-            particlenet_quark_hist_up = hists['hist_quark_up'].values()
-            particlenet_gluon_hist_up = hists['hist_gluon_up'].values()
-            particlenet_quark_hist_down = hists['hist_quark_down'].values()
-            particlenet_gluon_hist_down = hists['hist_gluon_down'].values()
+            particlenet_quark_hist = hists['quark_hist'].values()
+            particlenet_gluon_hist = hists['gluon_hist'].values()
+            particlenet_quark_hist_up = hists['quark_hist_up'].values()
+            particlenet_gluon_hist_up = hists['gluon_hist_up'].values()
+            particlenet_quark_hist_down = hists['quark_hist_down'].values()
+            particlenet_gluon_hist_down = hists['gluon_hist_down'].values()
 
         if determine_WPs and (eta_range == wp_eta_range) and (pt_range == wp_pt_range):
             print('QGL\n-------------')
