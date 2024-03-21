@@ -15,7 +15,7 @@ from roc_util_functions import *
 hep.style.use("CMS")
 matplotlib.rcParams['font.size'] = 22
 
-def main(config_path, display_plot, show_uncertainty, determine_WPs, save_plot):
+def main(config_path, display_plot, show_uncertainty_band, determine_WPs, save_plot):
     try:
         with open(config_path, 'rb') as f:
             config = tomllib.load(f)
@@ -118,7 +118,7 @@ def main(config_path, display_plot, show_uncertainty, determine_WPs, save_plot):
         fig, ax1 = plt.subplots(figsize=(8,8))
 
         plt.plot(fpr_qgl, tpr_qgl, linestyle='-', color='darkorange', lw = 2, label='QGL           (AUC: {})'.format(qgl_auc))
-        if show_uncertainty:
+        if show_uncertainty_band:
             plt.plot(fpr_qgl_up, tpr_qgl_up, linestyle='-', color='darkorange', lw = 0.5)
             plt.plot(fpr_qgl_down, tpr_qgl_down, linestyle='-', color='darkorange', lw = 0.5)
         xfill_qgl = np.sort(np.concatenate([fpr_qgl_up, fpr_qgl_down]))
@@ -127,7 +127,7 @@ def main(config_path, display_plot, show_uncertainty, determine_WPs, save_plot):
         plt.fill_between(xfill_qgl, interpolated_qgl_up, interpolated_qgl_down, interpolate=True, color='darkorange', alpha=0.2)
         
         plt.plot(fpr_deepjet, tpr_deepjet, linestyle='-', color='red', lw = 2, label='DeepJet     (AUC: {})'.format(deepjet_auc))
-        if show_uncertainty:
+        if show_uncertainty_band:
             plt.plot(fpr_deepjet_up, tpr_deepjet_up, linestyle='-', color='red', lw = 0.5)
             plt.plot(fpr_deepjet_down, tpr_deepjet_down, linestyle='-', color='red', lw = 0.5)
         xfill_deepjet = np.sort(np.concatenate([fpr_deepjet_up, fpr_deepjet_down]))
@@ -136,7 +136,7 @@ def main(config_path, display_plot, show_uncertainty, determine_WPs, save_plot):
         plt.fill_between(xfill_deepjet, interpolated_deepjet_up, interpolated_deepjet_down, interpolate=True, color='red', alpha=0.2)
 
         plt.plot(fpr_particlenet, tpr_particlenet, linestyle='-', color='blue', lw = 2, label='ParticleNet (AUC: {})'.format(particlenet_auc))
-        if show_uncertainty:
+        if show_uncertainty_band:
             plt.plot(fpr_particlenet_up, tpr_particlenet_up, linestyle='-', color='blue', lw = 0.5)
             plt.plot(fpr_particlenet_down, tpr_particlenet_down, linestyle='-', color='blue', lw = 0.5)
         xfill_particlenet = np.sort(np.concatenate([fpr_particlenet_up, fpr_particlenet_down]))
@@ -197,7 +197,7 @@ def main(config_path, display_plot, show_uncertainty, determine_WPs, save_plot):
 
         if save_plot:
             save_name = f'{plot_save_path}/QG_taggers_ROC_{campaign}_eta{eta_range}_pt{pt_range}'
-            if show_uncertainty:
+            if show_uncertainty_band:
                 save_name = f'{save_name}_with_uncertainties'
 
             plt.savefig(save_name+'.png')
@@ -213,9 +213,9 @@ if __name__ == '__main__':
     parser = OptionParser(usage='%prog [opt]')
     parser.add_option('--config', dest='config_path', type='string', default='', help='Path to config file.')
     parser.add_option('-d', '--display', dest='display_plot', action='store_true', default=False, help='Option to display plot.')
-    parser.add_option('-u', '--uncertainty', dest='show_uncertainty', action='store_true', default=False, help='Option to show uncertainties in the plot.')
+    parser.add_option('-u', '--uncertainty_band', dest='show_uncertainty_band', action='store_true', default=False, help='Option to show uncertainties in the plot.')
     parser.add_option('-w', '--wp', dest='determine_WPs', action='store_true', default=False, help='Option to print out quark and gluon efficiencies for WP determination.')
     parser.add_option('-s', '--save', dest='save_plot', action='store_true', default=False, help='Option to save plot to .png and .pdf files.')
     (opt, args) = parser.parse_args()
 
-    main(opt.config_path, opt.display_plot, opt.show_uncertainty, opt.determine_WPs, opt.save_plot)
+    main(opt.config_path, opt.display_plot, opt.show_uncertainty_band, opt.determine_WPs, opt.save_plot)
