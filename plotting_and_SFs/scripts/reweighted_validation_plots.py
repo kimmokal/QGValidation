@@ -168,8 +168,8 @@ def main(config_path, variable, binning, display, save_plot, save_root, inclusiv
                 else:
                     weight_pt_range = '80to8000'
 
-            if variable in ['qgl_new', 'qgl_ptD', 'qgl_mult', 'qgl_axis2']:
-                weight_variable = 'qgl_new'
+            if variable in ['qgl', 'qgl_ptD', 'qgl_mult', 'qgl_axis2']:
+                weight_variable = 'qgl'
             else:
                 weight_variable = variable
 
@@ -182,7 +182,7 @@ def main(config_path, variable, binning, display, save_plot, save_root, inclusiv
             gluon_weights_combined_unc_up = convert.from_uproot_THx(weight_path+'.root:gluon_weights_combined_unc_up', flow='clamp').to_evaluator()
             gluon_weights_combined_unc_down = convert.from_uproot_THx(weight_path+'.root:gluon_weights_combined_unc_down', flow='clamp').to_evaluator()
 
-            print(f'PLOTTING BIN:       {eta_low} < |eta| < {eta_high}, {pt_low} GeV < pT < {pt_high} GeV')
+            print(f'PROCESSING BIN:       {eta_low} < |eta| < {eta_high}, {pt_low} GeV < pT < {pt_high} GeV')
 
             if channel == 'zmm':
                 data_cuts = np.all([(np.abs(jet_eta_data) >= eta_low), (np.abs(jet_eta_data) < eta_high), (dimuon_pt_data > pt_low), (dimuon_pt_data < pt_high)], axis=0)
@@ -483,16 +483,11 @@ def main(config_path, variable, binning, display, save_plot, save_root, inclusiv
                 eta_text = r'|$\mathit{\eta}^{\mathrm{probe}}$| < ' + str(eta_high) 
             else:
                 eta_text = str(eta_low) + r' < |$\mathit{\eta}^{\mathrm{probe}}$| < ' + str(eta_high) 
-            if channel == 'dijet':
-                if inclusive:
-                    selection_text = r'$\mathit{p_T}^{\mathrm{tag}}$ > ' + str(pt_low) + ' GeV' + '\n' + eta_text
-                else:
-                    selection_text = str(pt_low) + r' < $\mathit{p_T}^{\mathrm{tag}}$ < ' + str(pt_high) + ' GeV' + '\n' + eta_text
-            elif channel == 'zmm':
-                if inclusive:
-                    selection_text = r'$\mathit{p_T}^{\mathrm{tag}}$ > ' + str(pt_low) + ' GeV' + '\n' + eta_text
-                else:
-                    selection_text = str(pt_low) + r' < $\mathit{p_T}^{\mathrm{tag}}$ < ' + str(pt_high) + ' GeV' + '\n' + eta_text
+            
+            if inclusive:
+                selection_text = r'$\mathit{p_T}^{\mathrm{tag}}$ > ' + str(pt_low) + ' GeV' + '\n' + eta_text
+            else:
+                selection_text = str(pt_low) + r' < $\mathit{p_T}^{\mathrm{tag}}$ < ' + str(pt_high) + ' GeV' + '\n' + eta_text
             plt.figtext(selection_text_x, selection_text_y, selection_text, fontsize=16, ha='center', ma='center', va='center')
 
             hep.cms.label('Preliminary', loc=1, data=True, lumi='41.5', fontsize=20)

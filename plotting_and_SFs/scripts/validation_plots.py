@@ -504,7 +504,6 @@ def main(config_path, variable, binning, display, save_plot, save_root, inclusiv
             ax2.set_xlabel(var_label[variable], fontsize=20, loc='right')
             
             plt.sca(ax1)
-
             channel_text = 'Dijet, Pythia' if channel=='dijet' else 'Z+jets, Pythia'
             channel_text_x = 0.615
             channel_text_y = 0.86
