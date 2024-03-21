@@ -2,9 +2,9 @@ import numpy as np
 import mplhep as hep
 import matplotlib.pyplot as plt
 import matplotlib
+import tomllib
 import uproot
 import hist
-import json
 import sys
 import os
 
@@ -41,7 +41,7 @@ def main(config_path, variable, working_point, display, save_plot, save_root, in
 
     if save_plot or save_root:
         output_path = config['path']['output']
-        plot_save_path = Path(f'{output_path}/val_plots/{channel}')
+        plot_save_path = Path(f'{output_path}/wp_val_plots/{channel}')
         plot_save_path.mkdir(parents=True, exist_ok=True)
         print(f'WRITING OUTPUT TO:  {plot_save_path}/')
 
@@ -496,8 +496,7 @@ def main(config_path, variable, working_point, display, save_plot, save_root, in
             fig.tight_layout()
             plt.subplots_adjust(hspace=0.1)
 
-            plot_save_path = Path(f'{os.environ["COFFEAHOME"]}/output/UL17/170124/wp_val_plots/{channel}')
-            plot_save_path.mkdir(parents=True, exist_ok=True)
+            plot_save_path = Path(f'{output_path}/wp_val_plots/{channel}')
 
             str_eta_low = str(eta_low).replace('.','_')
             str_eta_high = str(eta_high).replace('.','_')
