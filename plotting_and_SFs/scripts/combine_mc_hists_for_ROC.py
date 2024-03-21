@@ -96,13 +96,6 @@ def main(config_path, variable):
                     hist_quark_total_down += hist_quark_down
                     hist_gluon_total_down += hist_gluon_down
 
-        del hist_quark_total
-        del hist_gluon_total
-        del hist_quark_total_up
-        del hist_gluon_total_up
-        del hist_quark_total_down
-        del hist_gluon_total_down
-
         output_path = config['path']['output']
         save_path = Path(f'{output_path}/hists_for_roc/combined')
 
@@ -114,6 +107,14 @@ def main(config_path, variable):
             root_file['gluon_hist_up'] = hist_gluon_total_up
             root_file['quark_hist_down'] = hist_quark_total_down
             root_file['gluon_hist_down'] = hist_gluon_total_down
+
+        del hist_quark_total
+        del hist_gluon_total
+        del hist_quark_total_up
+        del hist_gluon_total_up
+        del hist_quark_total_down
+        del hist_gluon_total_down
+
 
 if __name__ == '__main__':
     parser = OptionParser(usage='%prog [opt]')

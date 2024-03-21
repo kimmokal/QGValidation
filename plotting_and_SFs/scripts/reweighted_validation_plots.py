@@ -182,7 +182,7 @@ def main(config_path, variable, binning, display, save_plot, save_root, inclusiv
             gluon_weights_combined_unc_up = convert.from_uproot_THx(weight_path+'.root:gluon_weights_combined_unc_up', flow='clamp').to_evaluator()
             gluon_weights_combined_unc_down = convert.from_uproot_THx(weight_path+'.root:gluon_weights_combined_unc_down', flow='clamp').to_evaluator()
 
-            print(f'PROCESSING BIN:       {eta_low} < |eta| < {eta_high}, {pt_low} GeV < pT < {pt_high} GeV')
+            print(f'PROCESSING BIN:     {eta_low} < |eta| < {eta_high}, {pt_low} GeV < pT < {pt_high} GeV')
 
             if channel == 'zmm':
                 data_cuts = np.all([(np.abs(jet_eta_data) >= eta_low), (np.abs(jet_eta_data) < eta_high), (dimuon_pt_data > pt_low), (dimuon_pt_data < pt_high)], axis=0)
