@@ -118,31 +118,25 @@ def main(config_path, display_plot, show_uncertainty_band, determine_WPs, save_p
         fig, ax1 = plt.subplots(figsize=(8,8))
 
         plt.plot(fpr_qgl, tpr_qgl, linestyle='-', color='darkorange', lw = 2, label='QGL           (AUC: {})'.format(qgl_auc))
-        if show_uncertainty_band:
-            plt.plot(fpr_qgl_up, tpr_qgl_up, linestyle='-', color='darkorange', lw = 0.5)
-            plt.plot(fpr_qgl_down, tpr_qgl_down, linestyle='-', color='darkorange', lw = 0.5)
         xfill_qgl = np.sort(np.concatenate([fpr_qgl_up, fpr_qgl_down]))
         interpolated_qgl_up = np.interp(xfill_qgl, np.sort(fpr_qgl_up), np.sort(tpr_qgl_up))
         interpolated_qgl_down = np.interp(xfill_qgl, np.sort(fpr_qgl_down), np.sort(tpr_qgl_down))
-        plt.fill_between(xfill_qgl, interpolated_qgl_up, interpolated_qgl_down, interpolate=True, color='darkorange', alpha=0.2)
+        if show_uncertainty_band:
+            plt.fill_between(xfill_qgl, interpolated_qgl_up, interpolated_qgl_down, interpolate=True, color='darkorange', alpha=0.2)
         
         plt.plot(fpr_deepjet, tpr_deepjet, linestyle='-', color='red', lw = 2, label='DeepJet     (AUC: {})'.format(deepjet_auc))
-        if show_uncertainty_band:
-            plt.plot(fpr_deepjet_up, tpr_deepjet_up, linestyle='-', color='red', lw = 0.5)
-            plt.plot(fpr_deepjet_down, tpr_deepjet_down, linestyle='-', color='red', lw = 0.5)
         xfill_deepjet = np.sort(np.concatenate([fpr_deepjet_up, fpr_deepjet_down]))
         interpolated_deepjet_up = np.interp(xfill_deepjet, np.sort(fpr_deepjet_up), np.sort(tpr_deepjet_up))
         interpolated_deepjet_down = np.interp(xfill_deepjet, np.sort(fpr_deepjet_down), np.sort(tpr_deepjet_down))
-        plt.fill_between(xfill_deepjet, interpolated_deepjet_up, interpolated_deepjet_down, interpolate=True, color='red', alpha=0.2)
+        if show_uncertainty_band:
+            plt.fill_between(xfill_deepjet, interpolated_deepjet_up, interpolated_deepjet_down, interpolate=True, color='red', alpha=0.2)
 
         plt.plot(fpr_particlenet, tpr_particlenet, linestyle='-', color='blue', lw = 2, label='ParticleNet (AUC: {})'.format(particlenet_auc))
-        if show_uncertainty_band:
-            plt.plot(fpr_particlenet_up, tpr_particlenet_up, linestyle='-', color='blue', lw = 0.5)
-            plt.plot(fpr_particlenet_down, tpr_particlenet_down, linestyle='-', color='blue', lw = 0.5)
         xfill_particlenet = np.sort(np.concatenate([fpr_particlenet_up, fpr_particlenet_down]))
         interpolated_particlenet_up = np.interp(xfill_particlenet, np.sort(fpr_particlenet_up), np.sort(tpr_particlenet_up))
         interpolated_particlenet_down = np.interp(xfill_particlenet, np.sort(fpr_particlenet_down), np.sort(tpr_particlenet_down))
-        plt.fill_between(xfill_particlenet, interpolated_particlenet_up, interpolated_particlenet_down, interpolate=True, color='blue', alpha=0.2)
+        if show_uncertainty_band:
+            plt.fill_between(xfill_particlenet, interpolated_particlenet_up, interpolated_particlenet_down, interpolate=True, color='blue', alpha=0.2)
 
         plt.plot([0, 1], [0, 1], color='grey', linestyle='--')
         plt.xlim([0.0, 1.0])
@@ -159,7 +153,10 @@ def main(config_path, display_plot, show_uncertainty_band, determine_WPs, save_p
         line_colors = ['blue', 'red', 'darkorange']
         box_handles = [matplotlib.patches.Patch(facecolor=color, label=label, alpha=0.2) for color, label in zip(line_colors, np.flip(ax1_labels))]
         line_handles = [matplotlib.lines.Line2D([0,1], [0,0], lw=2, color=color) for color in line_colors]
-        legend_handles = list(zip(box_handles, line_handles))
+        if show_uncertainty_band:
+            legend_handles = list(zip(box_handles, line_handles))
+        else: 
+            legend_handles = line_handles
         labels = np.flip(ax1_labels)
 
         ax1.legend((legend_handles[0],legend_handles[1],legend_handles[2]), (labels[0],labels[1],labels[2]), loc='lower right', fontsize=22, frameon=False, handleheight=0.6)
@@ -178,10 +175,10 @@ def main(config_path, display_plot, show_uncertainty_band, determine_WPs, save_p
 
         eta_low = eta_bin[0]
         eta_high = eta_bin[1]
-        if eta_low == '0_0':
-            eta_text = r'|$\mathit{\eta}$| < ' + eta_high.replace('_','.')
+        if str(eta_low) == '0_0':
+            eta_text = r'|$\mathit{\eta}$| < ' + str(eta_high).replace('_','.')
         else:
-            eta_text = eta_low.replace('_','.') + r' < |$\mathit{\eta}$| < ' + eta_high.replace('_','.')
+            eta_text = str(eta_low).replace('_','.') + r' < |$\mathit{\eta}$| < ' + str(eta_high).replace('_','.')
 
         pt_low = pt_bin[0]
         pt_high = pt_bin[1]
@@ -193,7 +190,7 @@ def main(config_path, display_plot, show_uncertainty_band, determine_WPs, save_p
         plt.figtext(selection_text_x, selection_text_y, cut_text, fontsize=22, ha='center', ma='center', va='center')
 
         fig.tight_layout()
-        hep.cms.label('Preliminary', loc=1, fontsize=22)
+        hep.cms.label('Preliminary', loc=1, fontsize=21)
 
         if save_plot:
             save_name = f'{plot_save_path}/QG_taggers_ROC_{campaign}_eta{eta_range}_pt{pt_range}'
