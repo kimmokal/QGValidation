@@ -175,7 +175,7 @@ def main(config_path, display_plot, show_uncertainty_band, determine_WPs, save_p
 
         eta_low = eta_bin[0]
         eta_high = eta_bin[1]
-        if str(eta_low) == '0_0':
+        if str(eta_low) == '0.0':
             eta_text = r'|$\mathit{\eta}$| < ' + str(eta_high).replace('_','.')
         else:
             eta_text = str(eta_low).replace('_','.') + r' < |$\mathit{\eta}$| < ' + str(eta_high).replace('_','.')
