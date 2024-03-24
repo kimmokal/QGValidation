@@ -135,10 +135,6 @@ def main(config_path, variable, working_point, syst_name, save):
             dijet_path = Path(f'{input_file_path}/wp_val_plots/dijet/{variable}_dijet_{campaign}_eta{eta_range}_pt{pt_range}_{working_point}WP')
             zmm_path = Path(f'{input_file_path}/wp_val_plots/zmm/{variable}_zmm_{campaign}_eta{eta_range}_pt{pt_range}_{working_point}WP')
 
-            pt_low = pt_bins[i]
-            pt_high = pt_bins[i]
-            pt_range = str(pt_low)+'to'+str(pt_high)
-
             dijet_histograms, zmm_histograms = read_histograms(dijet_path, zmm_path, base_histogram_name, eta_range, pt_range)
             quark_weights, gluon_weights = weight_extraction(dijet_histograms, zmm_histograms)
 
@@ -157,8 +153,8 @@ def main(config_path, variable, working_point, syst_name, save):
                 dijet_path_syst_down = Path(f'{dijet_path}_{syst_name}_syst_down')
                 zmm_path_syst_down = Path(f'{zmm_path}_{syst_name}_syst_down')
 
-                dijet_histograms_syst_up, zmm_histograms_syst_up = read_histograms(dijet_path_syst_up, zmm_path_syst_up, base_histogram_name, eta_range, combine_pt_range)
-                dijet_histograms_syst_down, zmm_histograms_syst_down = read_histograms(dijet_path_syst_down, zmm_path_syst_down, base_histogram_name, eta_range, combine_pt_range)
+                dijet_histograms_syst_up, zmm_histograms_syst_up = read_histograms(dijet_path_syst_up, zmm_path_syst_up, base_histogram_name, eta_range, pt_range)
+                dijet_histograms_syst_down, zmm_histograms_syst_down = read_histograms(dijet_path_syst_down, zmm_path_syst_down, base_histogram_name, eta_range, pt_range)
 
                 quark_weights_syst_up, gluon_weights_syst_up = weight_extraction(dijet_histograms_syst_up, zmm_histograms_syst_up)
                 quark_weights_syst_down, gluon_weights_syst_down = weight_extraction(dijet_histograms_syst_down, zmm_histograms_syst_down)

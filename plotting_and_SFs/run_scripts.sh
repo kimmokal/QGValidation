@@ -175,8 +175,8 @@ then
         done
     done
 fi
-if [ ${FLAG_COMBINE_WP_SCALE_FACTORS} -eq 1 ] 
 
+if [ ${FLAG_COMBINE_WP_SCALE_FACTORS} -eq 1 ] 
 then
     for variable in qgl deepjet particlenet
     do
