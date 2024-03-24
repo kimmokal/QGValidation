@@ -30,8 +30,9 @@ FLAG_COMBINE_HISTOGRAMS_FOR_ROC_CURVES=1
 FLAG_PLOT_ROC_CURVES=1
 
 FLAG_PROCESS_WP_VALIDATION_PLOTS=1
-FLAG_EXTRACT_WP_SCALE_FACTORS=0
-FLAG_PLOT_WP_SCALE_FACTORS=0
+FLAG_EXTRACT_WP_SCALE_FACTORS=1
+FLAG_COMBINE_WP_SCALE_FACTORS=1
+FLAG_PLOT_WP_SCALE_FACTORS=1
 ####################################################
 
 if [ ${FLAG_PROCESS_VALIDATION_PLOTS} -eq 1 ] 
@@ -156,6 +157,45 @@ then
                       python ${script_path}/wp_validation_plots.py --config ${config_file} -c ${channel} -v ${variable} -w ${wp} --syst ${syst} --syst_up -s -r
                       python ${script_path}/wp_validation_plots.py --config ${config_file} -c ${channel} -v ${variable} -w ${wp} --syst ${syst} --syst_down -s -r
                 done
+            done
+        done
+    done
+fi
+
+if [ ${FLAG_EXTRACT_WP_SCALE_FACTORS} -eq 1 ] 
+then
+    for variable in qgl deepjet particlenet
+    do
+        for wp in loose medium tight
+        do
+            for syst in nominal gluon fsr isr pu jes jer
+            do
+                python ${script_path}/wp_extract_scale_factors.py --config ${config_file} -v ${variable} -w ${wp} --syst ${syst} -s
+            done
+        done
+    done
+fi
+if [ ${FLAG_COMBINE_WP_SCALE_FACTORS} -eq 1 ] 
+
+then
+    for variable in qgl deepjet particlenet
+    do
+        for wp in loose medium tight
+        do
+            python ${script_path}/wp_combine_scale_factors.py --config ${config_file} -v ${variable} -w ${wp}
+        done
+    done
+fi
+
+if [ ${FLAG_PLOT_WP_SCALE_FACTORS} -eq 1 ] 
+then
+    for variable in qgl deepjet particlenet
+    do
+        for wp in loose medium tight
+        do
+            for syst in nominal gluon fsr isr pu jes jer total
+            do
+                python ${script_path}/wp_scale_factor_plot.py --config ${config_file} -v ${variable} -w ${wp} --syst ${syst} -s
             done
         done
     done
